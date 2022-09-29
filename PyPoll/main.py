@@ -23,66 +23,40 @@ with open(poll_csv, newline='') as f:
   print('---------------------------------')
   
   # identify unique candidates
-  #poll_summary = []
   candidates = set()
   
   for row in poll:
     if row[2] not in candidates:
       candidates.add(row[2])
   
+  # set values for starting variables to help identify winning candidate
   max_votes = 0
   winner = ''
   
+  # iterate through list of candidates
   for each in candidates:
+    
+    # set subtotal of votes for each candidate to 0
     subtotal = 0
     
+    # tally each vote for the candidate
     for row in poll:
       if each == row[2]:
         subtotal += 1
     
+    # if the subtotal of votes for the candidate is greater than the stored value of max_votes
+    # identify as the current winning candidate and update the max_vote value
     if subtotal > max_votes:
       max_votes = subtotal
       winner = each
     
+    # calculate the percentage of votes for the candidate
     vote_percent = round(subtotal / votes * 100, 3)
+    
+    # print candidate's results
     print(f'{each}: {vote_percent}% ({subtotal})' )
   
+  # print overall winner
   print('---------------------------------')
   print(f'Winner: {winner}')
   print('---------------------------------')
-    
-    
-    
-  
-  
-  
-#def tally_candidate_votes():
-  
-  
-# In this challenge, you are tasked with helping a small, rural town modernize its vote counting process.
-# You will be given a set of poll data called election_data.csv. The dataset is composed of three columns: "Voter ID", "County", and "Candidate". 
-# Your task is to create a Python script that analyzes the votes and calculates each of the following:
-
-# The total number of votes cast
-
-# A complete list of candidates who received votes
-
-# The percentage of votes each candidate won
-
-# The total number of votes each candidate won
-
-# The winner of the election based on popular vote.
-
-# Your analysis should look similar to the following:
-
-# Election Results
-# -------------------------
-# Total Votes: 369711
-# -------------------------
-# Charles Casper Stockham: 23.049% (85213)
-# Diana DeGette: 73.812% (272892)
-# Raymon Anthony Doane: 3.139% (11606)
-# -------------------------
-# Winner: Diana DeGette
-# -------------------------
-# In addition, your final script should both print the analysis to the terminal and export a text file with the results.
