@@ -2,6 +2,25 @@
 import os
 import csv
 
+# function to append data to file
+def create_csv(line):
+  # specify location and file name to write data
+  output_path = os.path.join('analysis','budget_analysis.csv')
+  
+  # open file to append data
+  with open(output_path, 'a', newline='') as f:
+    
+    # initialize csv.writer
+    writer = csv.writer(f, delimiter=',')
+    
+    # write line to CSV
+    writer.writerow(line)
+    
+# function to print to terminal and CSV synchronously
+def print_all(line):
+  print(line[0])
+  create_csv(line)
+
 # summarize financial data from budget_data.csv
 # set path to file
 budget_csv = os.path.join('Resources','budget_data.csv')
@@ -23,9 +42,9 @@ with open(budget_csv, newline='') as f:
 months = len(budget)
   
 # print total number of months
-print('Financial Analysis')
-print('-------------------------------------')
-print(f'Total Months: {months}')
+print_all(['Financial Analysis'])
+print_all(['-------------------------------------'])
+print_all([f'Total Months: {months}'])
   
 # initialize variables for calculations
 balance = 0
@@ -50,6 +69,8 @@ for i in range(len(budget)):
     change = current - previous
     change_amounts.append(change)
     
+    # compare value of change to stored values for max_increase and max_decrease
+    # update stored values for max_increase and max_decrease as well as the months if conditional criteria are met
     if change > max_increase:
       month_max_increase = month
       max_increase = change
@@ -61,12 +82,12 @@ for i in range(len(budget)):
   balance += int(budget[i][1])
 
 # print sum of the profit/losses column
-print(f'Total: ${balance}')
+print_all([f'Total: ${balance}'])
 
 # calculate the average change from month-to-month
 avg_change = round(sum(change_amounts)/len(change_amounts),2)
 
-# print the average change
-print(f'Average Change: ${avg_change}')
-print(f'Greatest Increase in Profits: {month_max_increase} (${max_increase})')
-print(f'Greatest Decrease in Profits: {month_max_decrease} (${max_decrease})')
+# print the average change, month and value of greatest increase in profits and decrease in profits
+print_all([f'Average Change: ${avg_change}'])
+print_all([f'Greatest Increase in Profits: {month_max_increase} (${max_increase})'])
+print_all([f'Greatest Decrease in Profits: {month_max_decrease} (${max_decrease})'])
