@@ -2,10 +2,33 @@
 import os
 import csv
 
+# function to append data to file
+def create_csv(line):
+  # specify location and file name to write data
+  output_path = os.path.join('analysis','poll_results.csv')
+  
+  # open file to append data
+  with open(output_path, 'a', newline='') as f:
+    
+    # initialize csv.writer
+    writer = csv.writer(f, delimiter=',')
+    
+    # write line to CSV
+    writer.writerow(line)
+    
+# function to print to terminal and CSV synchronously
+def print_all(line):
+  print(line[0])
+  create_csv(line)
+
+# summarize poll data from election_data.csv and find winner
 # set path to file
 poll_csv = os.path.join('Resources','election_data.csv')
 
+# open file using read mode and specify variable
 with open(poll_csv, newline='') as f:
+  
+  # initialize reader
   reader = csv.reader(f, delimiter=',')
 
   # read in headers and exclude from results
@@ -13,50 +36,52 @@ with open(poll_csv, newline='') as f:
   
   # save data to list
   poll = list(reader)
-  #print(poll[:5])
   
-  # count number of votes
-  votes = len(poll)
-  print('Election Results')
-  print('---------------------------------')
-  print(f'Total Votes: {votes}')
-  print('---------------------------------')
+  # count number of votes and print to terminal and file
+  total_votes = len(poll)
+  print_all(['Election Results'])
+  print_all(['---------------------------------'])
+  print_all([f'Total Votes: {total_votes}'])
+  print_all(['---------------------------------'])
   
-  # identify unique candidates
+  # create set to store unique candidates and save to variable
   candidates = set()
   
+  # iterate through poll data
   for row in poll:
+    
+    # if candidate's name is not in set, add to set
     if row[2] not in candidates:
       candidates.add(row[2])
   
-  # set values for starting variables to help identify winning candidate
+  # initialize variables to help identify winning candidate
   max_votes = 0
   winner = ''
   
-  # iterate through list of candidates
-  for each in candidates:
+  # iterate through set of candidates
+  for candidate in candidates:
     
-    # set subtotal of votes for each candidate to 0
-    subtotal = 0
+    # initialize initial count of votes for each candidate to 0
+    vote_count = 0
     
     # tally each vote for the candidate
     for row in poll:
-      if each == row[2]:
-        subtotal += 1
+      if candidate == row[2]:
+        vote_count += 1
     
-    # if the subtotal of votes for the candidate is greater than the stored value of max_votes
-    # identify as the current winning candidate and update the max_vote value
-    if subtotal > max_votes:
-      max_votes = subtotal
-      winner = each
+    # if the votes for the candidate is greater than the stored value of max_votes
+    # tag the candidate as the winner (so far) and update the number of max_votes
+    if vote_count > max_votes:
+      max_votes = vote_count
+      winner = candidate
     
     # calculate the percentage of votes for the candidate
-    vote_percent = round(subtotal / votes * 100, 3)
+    vote_percent = round(vote_count / total_votes * 100, 3)
     
-    # print candidate's results
-    print(f'{each}: {vote_percent}% ({subtotal})' )
+    # print candidate's results and print to terminal and file
+    print_all([f'{candidate}: {vote_percent}% ({vote_count})'])
   
-  # print overall winner
-  print('---------------------------------')
-  print(f'Winner: {winner}')
-  print('---------------------------------')
+  # print overall winner to terminal and file
+  print_all(['---------------------------------'])
+  print_all([f'Winner: {winner}'])
+  print_all(['---------------------------------'])
