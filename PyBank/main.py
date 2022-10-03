@@ -1,6 +1,7 @@
 # dependencies
 import os
 import csv
+import statistics
 
 # function to append data to file
 def create_csv(line):
@@ -85,7 +86,7 @@ for i in range(len(budget)):
 print_all([f'Total: ${balance}'])
 
 # calculate the average change from month-to-month
-avg_change = round(sum(change_amounts)/len(change_amounts),2)
+avg_change = round(statistics.mean(change_amounts),2)
 
 # print the average change, month and value of greatest increase in profits and decrease in profits
 print_all([f'Average Change: ${avg_change}'])
